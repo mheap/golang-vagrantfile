@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestRender(t *testing.T) {
+func TestRenderForwardedPort(t *testing.T) {
 	forwardedPort := &ForwardedPort{
 		Guest: 80,
 		Host:  8080,

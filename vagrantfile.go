@@ -14,12 +14,6 @@ type VagrantFile struct {
 	SyncedFolders   []SyncedFolder
 }
 
-type PrivateNetwork struct {
-	Dhcp       bool
-	Ip         string
-	AutoConfig bool
-}
-
 type PublicNetwork struct {
 	Dhcp       bool
 	Ip         string
