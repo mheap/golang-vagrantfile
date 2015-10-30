@@ -12,7 +12,7 @@ type SyncedFolder struct {
 	BoxName string
 }
 
-func (p *SyncedFolder) Render() (output string, err error) {
+func (p SyncedFolder) Render() (output string, err error) {
 
 	// We don't have any synced folders if all settings are nil
 	if p.Local == "" && p.Remote == "" && p.Type == "" {

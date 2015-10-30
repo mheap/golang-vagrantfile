@@ -14,6 +14,23 @@ type VagrantFile struct {
 	SyncedFolders   []SyncedFolder
 }
 
+type Renderable interface {
+	Render() (string, error)
+}
+
+func RenderGroup(input []Renderable) (output string, err error) {
+	for _, v := range input {
+		content, err := v.Render()
+		if err != nil {
+			return "", err
+		}
+		output = output + content + "\n	"
+	}
+
+	return output, nil
+
+}
+
 func (v *VagrantFile) Render() (s string, err error) {
 
 	// Set some smart defaults

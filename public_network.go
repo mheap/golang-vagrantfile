@@ -13,7 +13,7 @@ type PublicNetwork struct {
 	DisableAutoConfig bool
 }
 
-func (p *PublicNetwork) Render() (output string, err error) {
+func (p PublicNetwork) Render() (output string, err error) {
 
 	// We don't have any public networks if all settings are nil
 	if !p.Dhcp && p.Ip == "" && p.Bridge == "" && !p.DisableAutoConfig {

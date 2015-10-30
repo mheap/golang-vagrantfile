@@ -11,7 +11,7 @@ type ForwardedPort struct {
 	BoxName string
 }
 
-func (p *ForwardedPort) Render() (output string, err error) {
+func (p ForwardedPort) Render() (output string, err error) {
 
 	// Sensible defaults
 	if p.BoxName == "" {

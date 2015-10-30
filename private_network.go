@@ -12,7 +12,7 @@ type PrivateNetwork struct {
 	BoxName           string
 }
 
-func (p *PrivateNetwork) Render() (output string, err error) {
+func (p PrivateNetwork) Render() (output string, err error) {
 
 	// We don't have any private networks if all settings are nil
 	if !p.Dhcp && p.Ip == "" && !p.DisableAutoConfig {
