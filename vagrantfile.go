@@ -40,14 +40,21 @@ func (v *VagrantFile) Render() (s string, err error) {
 		return "", err
 	}
 
+	privateNetworks, err := RenderPrivateNetworks(v.PrivateNetworks)
+
+	if err != nil {
+		return "", err
+	}
+
 	return fmt.Sprintf(
 		`Vagrant.configure(%d) do |config|
 	config.vm.box = "%s"
 	config.vm.box_check_update = %t
 	%s
+	%s
 end`,
 
-		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts), nil
+		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks), nil
 }
 
 func NewVagrantfile() VagrantFile {

@@ -17,6 +17,7 @@ func TestRenderDefaults(t *testing.T) {
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.box_check_update = true
 	
+	
 end`
 
 	if output != expectedOutput {
@@ -39,6 +40,14 @@ func TestRenderCustom(t *testing.T) {
 				Host:  5678,
 			},
 		},
+		PrivateNetworks: []PrivateNetwork{
+			PrivateNetwork{
+				Ip: "192.168.33.10",
+			},
+			PrivateNetwork{
+				Dhcp: true,
+			},
+		},
 	}
 
 	output, _ := v.Render()
@@ -48,6 +57,9 @@ func TestRenderCustom(t *testing.T) {
 	config.vm.box_check_update = false
 	config.vm.network "forwarded_port", guest: 80, host: 8080
 	config.vm.network "forwarded_port", guest: 1234, host: 5678
+	
+	config.vm.network "private_network", ip: "192.168.33.10"
+	config.vm.network "private_network", dhcp: true
 	
 end`
 
