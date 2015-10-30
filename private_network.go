@@ -42,3 +42,15 @@ func (p *PrivateNetwork) Render() (output string, err error) {
 
 	return output, nil
 }
+
+func RenderPrivateNetworks(networks []PrivateNetwork) (output string, err error) {
+	for _, v := range networks {
+		content, err := v.Render()
+		if err != nil {
+			return "", err
+		}
+		output = output + content + "\n	"
+	}
+
+	return output, nil
+}
