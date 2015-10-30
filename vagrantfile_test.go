@@ -28,6 +28,17 @@ func TestRenderCustom(t *testing.T) {
 	v := &VagrantFile{
 		Box:            "fedora/fedora",
 		BoxCheckUpdate: false,
+		ForwardedPorts: []ForwardedPort{
+			ForwardedPort{
+				Guest: 80,
+				Host:  8080,
+			},
+
+			ForwardedPort{
+				Guest: 1234,
+				Host:  5678,
+			},
+		},
 	}
 
 	output, _ := v.Render()
@@ -35,6 +46,8 @@ func TestRenderCustom(t *testing.T) {
 	expectedOutput := `Vagrant.configure(2) do |config|
 	config.vm.box = "fedora/fedora"
 	config.vm.box_check_update = false
+	config.vm.network "forwarded_port", guest: 80, host: 8080
+	config.vm.network "forwarded_port", guest: 1234, host: 5678
 	
 end`
 

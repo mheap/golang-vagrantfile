@@ -23,7 +23,7 @@ func (p *ForwardedPort) Render() string {
 func RenderForwardedPorts(ports []ForwardedPort) (output string) {
 
 	for _, v := range ports {
-		output = output + v.Render() + "\n"
+		output = output + v.Render() + "\n	"
 	}
 
 	return output
