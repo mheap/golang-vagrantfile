@@ -14,12 +14,6 @@ type VagrantFile struct {
 	SyncedFolders   []SyncedFolder
 }
 
-type SyncedFolder struct {
-	Local  string
-	Remote string
-	Type   string
-}
-
 func (v *VagrantFile) Render() (s string, err error) {
 
 	// Set some smart defaults
@@ -42,6 +36,11 @@ func (v *VagrantFile) Render() (s string, err error) {
 		return "", err
 	}
 
+	syncedFolders, err := RenderSyncedFolders(v.SyncedFolders)
+	if err != nil {
+		return "", err
+	}
+
 	return fmt.Sprintf(
 		`Vagrant.configure(%d) do |config|
 	config.vm.box = "%s"
@@ -49,9 +48,10 @@ func (v *VagrantFile) Render() (s string, err error) {
 	%s
 	%s
 	%s
+	%s
 end`,
 
-		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks, publicNetwork), nil
+		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks, publicNetwork, syncedFolders), nil
 }
 
 func NewVagrantfile() VagrantFile {

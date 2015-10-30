@@ -19,6 +19,7 @@ func TestRenderDefaults(t *testing.T) {
 	
 	
 	
+	
 end`
 
 	if err != nil {
@@ -59,6 +60,17 @@ func TestRenderCustom(t *testing.T) {
 			Dhcp:   true,
 			Bridge: "en1 (Airport)",
 		},
+
+		SyncedFolders: []SyncedFolder{
+			SyncedFolder{
+				Local:  "../data",
+				Remote: "/var/www/folder",
+			},
+			SyncedFolder{
+				Local:  "/path/to/folder",
+				Remote: "/tmp/bees",
+			},
+		},
 	}
 
 	output, err := v.Render()
@@ -78,6 +90,9 @@ func TestRenderCustom(t *testing.T) {
 	config.vm.network "private_network", dhcp: true
 	
 	config.vm.network "public_network", dhcp: true, bridge: "en1 (Airport)"
+	config.vm.synced_folder "../data", "/var/www/folder"
+	config.vm.synced_folder "/path/to/folder", "/tmp/bees"
+	
 end`
 
 	if output != expectedOutput {
