@@ -14,6 +14,15 @@ type PrivateNetwork struct {
 
 func (p *PrivateNetwork) Render() (output string, err error) {
 
+	// We don't have any private networks if all settings are nil
+	if !p.Dhcp && p.Ip == "" && !p.DisableAutoConfig {
+		return "", nil
+	}
+
+	if !p.Dhcp && p.Ip == "" {
+		return "", errors.New("You must either provide an IP address or enable DHCP")
+	}
+
 	if !p.Dhcp && p.Ip == "" {
 		return "", errors.New("You must either provide an IP address or enable DHCP")
 	}

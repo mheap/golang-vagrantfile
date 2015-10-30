@@ -14,13 +14,6 @@ type VagrantFile struct {
 	SyncedFolders   []SyncedFolder
 }
 
-type PublicNetwork struct {
-	Dhcp       bool
-	Ip         string
-	Bridge     string
-	AutoConfig bool
-}
-
 type SyncedFolder struct {
 	Local  string
 	Remote string
@@ -35,13 +28,16 @@ func (v *VagrantFile) Render() (s string, err error) {
 	}
 
 	forwardedPorts, err := RenderForwardedPorts(v.ForwardedPorts)
-
 	if err != nil {
 		return "", err
 	}
 
 	privateNetworks, err := RenderPrivateNetworks(v.PrivateNetworks)
+	if err != nil {
+		return "", err
+	}
 
+	publicNetwork, err := v.PublicNetwork.Render()
 	if err != nil {
 		return "", err
 	}
@@ -52,9 +48,10 @@ func (v *VagrantFile) Render() (s string, err error) {
 	config.vm.box_check_update = %t
 	%s
 	%s
+	%s
 end`,
 
-		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks), nil
+		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks, publicNetwork), nil
 }
 
 func NewVagrantfile() VagrantFile {

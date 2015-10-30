@@ -11,14 +11,20 @@ func TestMain(m *testing.M) {
 
 func TestRenderDefaults(t *testing.T) {
 	v := NewVagrantfile()
-	output, _ := v.Render()
+	output, err := v.Render()
 
 	expectedOutput := `Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.box_check_update = true
 	
 	
+	
 end`
+
+	if err != nil {
+		t.Errorf(".\nGot an unexpected error: %s", err)
+		return
+	}
 
 	if output != expectedOutput {
 		t.Errorf("Default VagrantFile was incorrect.\nGot: %s\nExpected: %s", output, expectedOutput)
@@ -48,9 +54,19 @@ func TestRenderCustom(t *testing.T) {
 				Dhcp: true,
 			},
 		},
+
+		PublicNetwork: PublicNetwork{
+			Dhcp:   true,
+			Bridge: "en1 (Airport)",
+		},
 	}
 
-	output, _ := v.Render()
+	output, err := v.Render()
+
+	if err != nil {
+		t.Errorf(".\nGot an unexpected error: %s", err)
+		return
+	}
 
 	expectedOutput := `Vagrant.configure(2) do |config|
 	config.vm.box = "fedora/fedora"
@@ -61,6 +77,7 @@ func TestRenderCustom(t *testing.T) {
 	config.vm.network "private_network", ip: "192.168.33.10"
 	config.vm.network "private_network", dhcp: true
 	
+	config.vm.network "public_network", dhcp: true, bridge: "en1 (Airport)"
 end`
 
 	if output != expectedOutput {
