@@ -16,6 +16,7 @@ func TestRenderDefaults(t *testing.T) {
 	expectedOutput := `Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.box_check_update = true
+	
 end`
 
 	if output != expectedOutput {
@@ -34,6 +35,7 @@ func TestRenderCustom(t *testing.T) {
 	expectedOutput := `Vagrant.configure(2) do |config|
 	config.vm.box = "fedora/fedora"
 	config.vm.box_check_update = false
+	
 end`
 
 	if output != expectedOutput {

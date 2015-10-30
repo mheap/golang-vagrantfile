@@ -14,11 +14,6 @@ type VagrantFile struct {
 	SyncedFolders   []SyncedFolder
 }
 
-type ForwardedPort struct {
-	Guest int
-	Host  int
-}
-
 type PrivateNetwork struct {
 	Dhcp       bool
 	Ip         string
@@ -49,9 +44,10 @@ func (v *VagrantFile) Render() (s string, err error) {
 		`Vagrant.configure(%d) do |config|
 	config.vm.box = "%s"
 	config.vm.box_check_update = %t
+	%s
 end`,
 
-		v.Version, v.Box, v.BoxCheckUpdate), nil
+		v.Version, v.Box, v.BoxCheckUpdate, RenderForwardedPorts(v.ForwardedPorts)), nil
 }
 
 func NewVagrantfile() VagrantFile {
