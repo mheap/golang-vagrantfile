@@ -5,15 +5,59 @@ import (
 )
 
 type VagrantFile struct {
-	Version int
+	Version         int
+	Box             string
+	BoxCheckUpdate  bool
+	ForwardedPorts  []ForwardedPort
+	PrivateNetworks []PrivateNetwork
+	PublicNetwork   PublicNetwork
+	SyncedFolders   []SyncedFolder
+}
+
+type ForwardedPort struct {
+	Guest int
+	Host  int
+}
+
+type PrivateNetwork struct {
+	Dhcp       bool
+	Ip         string
+	AutoConfig bool
+}
+
+type PublicNetwork struct {
+	Dhcp       bool
+	Ip         string
+	Bridge     string
+	AutoConfig bool
+}
+
+type SyncedFolder struct {
+	Local  string
+	Remote string
+	Type   string
 }
 
 func (v *VagrantFile) Render() (s string, err error) {
-	return fmt.Sprintf("VagrantFile contents here: %d", v.Version), nil
+
+	// Set some smart defaults
+	if v.Version < 1 {
+		v.Version = 2
+	}
+
+	return fmt.Sprintf(
+		`Vagrant.configure(%d) do |config|
+	config.vm.box = "%s"
+	config.vm.box_check_update = %t
+end`,
+
+		v.Version, v.Box, v.BoxCheckUpdate), nil
 }
 
 func NewVagrantfile() VagrantFile {
 	return VagrantFile{
-		Version: 2,
+		Version:        2,
+		Box:            "ubuntu/trusty64",
+		BoxCheckUpdate: true,
 	}
 }
