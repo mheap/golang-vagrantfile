@@ -5,6 +5,7 @@ import (
 )
 
 type VagrantFile struct {
+	Hostname        string
 	Version         int
 	Box             string
 	BoxCheckUpdate  bool
@@ -60,6 +61,7 @@ func (v *VagrantFile) Render() (s string, err error) {
 
 	return fmt.Sprintf(
 		`Vagrant.configure(%d) do |config|
+	config.vm.hostname = "%s"
 	config.vm.box = "%s"
 	config.vm.box_check_update = %t
 	%s
@@ -68,11 +70,12 @@ func (v *VagrantFile) Render() (s string, err error) {
 	%s
 end`,
 
-		v.Version, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks, publicNetwork, syncedFolders), nil
+		v.Version, v.Hostname, v.Box, v.BoxCheckUpdate, forwardedPorts, privateNetworks, publicNetwork, syncedFolders), nil
 }
 
 func NewVagrantfile() VagrantFile {
 	return VagrantFile{
+		Hostname:       "default",
 		Version:        2,
 		Box:            "ubuntu/trusty64",
 		BoxCheckUpdate: true,

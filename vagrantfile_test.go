@@ -14,6 +14,7 @@ func TestRenderDefaults(t *testing.T) {
 	output, err := v.Render()
 
 	expectedOutput := `Vagrant.configure(2) do |config|
+	config.vm.hostname = "default"
 	config.vm.box = "ubuntu/trusty64"
 	config.vm.box_check_update = true
 	
@@ -34,6 +35,7 @@ end`
 
 func TestRenderCustom(t *testing.T) {
 	v := &VagrantFile{
+		Hostname:       "michael",
 		Box:            "fedora/fedora",
 		BoxCheckUpdate: false,
 		ForwardedPorts: []ForwardedPort{
@@ -81,6 +83,7 @@ func TestRenderCustom(t *testing.T) {
 	}
 
 	expectedOutput := `Vagrant.configure(2) do |config|
+	config.vm.hostname = "michael"
 	config.vm.box = "fedora/fedora"
 	config.vm.box_check_update = false
 	config.vm.network "forwarded_port", guest: 80, host: 8080
