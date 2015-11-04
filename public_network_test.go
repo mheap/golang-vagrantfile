@@ -77,3 +77,38 @@ func TestRenderPublicNetworkBridge(t *testing.T) {
 		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
 	}
 }
+
+func TestRenderPublicNetworkErrorNoIpNoDHCP(t *testing.T) {
+	publicNetwork := &PublicNetwork{
+		DisableAutoConfig: true,
+	}
+
+	output, err := publicNetwork.Render()
+	expectedOutput := "You must either provide an IP address or enable DHCP"
+
+	if output != "" {
+		t.Errorf("Got an unexpected result (Was expecting error): %s", output)
+	}
+
+	if err.Error() != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", err, expectedOutput)
+	}
+}
+
+func TestRenderPublicNetworkErrorNoIpDisableAutoConfig(t *testing.T) {
+	publicNetwork := &PublicNetwork{
+		Dhcp:              true,
+		DisableAutoConfig: true,
+	}
+
+	output, err := publicNetwork.Render()
+	expectedOutput := "You must provide an IP address when disabling auto config"
+
+	if output != "" {
+		t.Errorf("Got an unexpected result (Was expecting error): %s", output)
+	}
+
+	if err.Error() != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", err, expectedOutput)
+	}
+}

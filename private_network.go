@@ -23,10 +23,6 @@ func (p PrivateNetwork) Render() (output string, err error) {
 		return "", errors.New("You must either provide an IP address or enable DHCP")
 	}
 
-	if !p.Dhcp && p.Ip == "" {
-		return "", errors.New("You must either provide an IP address or enable DHCP")
-	}
-
 	if p.DisableAutoConfig && p.Ip == "" {
 		return "", errors.New("You must provide an IP address when disabling auto config")
 	}

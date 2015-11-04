@@ -49,3 +49,75 @@ func TestRenderSyncedFolders(t *testing.T) {
 		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
 	}
 }
+
+func TestRenderSyncedFolderNoSettings(t *testing.T) {
+	folder := &SyncedFolder{}
+
+	output, err := folder.Render()
+	expectedOutput := ""
+
+	if err != nil {
+		t.Errorf(".\nGot an unexpected error: %s", err)
+		return
+	}
+
+	if output != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
+	}
+}
+
+func TestRenderSyncedFolderNoLocalFolder(t *testing.T) {
+	folder := &SyncedFolder{
+		Remote: "/tmp",
+	}
+
+	output, err := folder.Render()
+	expectedOutput := "You must provide a local folder to sync"
+
+	if output != "" {
+		t.Errorf("Got an unexpected result (Was expecting error): %s", output)
+		return
+	}
+
+	if err.Error() != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
+	}
+}
+
+func TestRenderSyncedFolderNoRemoteFolder(t *testing.T) {
+	folder := &SyncedFolder{
+		Local: "/tmp",
+	}
+
+	output, err := folder.Render()
+	expectedOutput := "You must provide a remote folder to sync"
+
+	if output != "" {
+		t.Errorf("Got an unexpected result (Was expecting error): %s", output)
+		return
+	}
+
+	if err.Error() != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
+	}
+}
+
+func TestRenderSyncedFolderListErr(t *testing.T) {
+	folders := []SyncedFolder{
+		SyncedFolder{
+			Local: "/tmp",
+		},
+	}
+
+	output, err := RenderSyncedFolders(folders)
+	expectedOutput := "You must provide a remote folder to sync"
+
+	if output != "" {
+		t.Errorf("Got an unexpected result (Was expecting error): %s", output)
+		return
+	}
+
+	if err.Error() != expectedOutput {
+		t.Errorf(".\nGot: %s\nExpected: %s", output, expectedOutput)
+	}
+}
